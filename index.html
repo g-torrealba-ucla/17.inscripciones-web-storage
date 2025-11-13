@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título de la página y de la vista previa (WhatsApp) -->
+    <title>Mi Agenda (v.01)</title>
+    <meta property="og:title" content="Registro Académico" />
+    <!-- Descripción corta y atractiva -->
+    <meta property="og:description" content="Agenda de mis contactos >UCLA-DCyT<" />
+    <!-- Imagen que se muestra en WhatsApp (logo o imagen destacada, 800x418 px recomendado) -->
+    <meta property="og:image" content="https://mi-agenda-v01.vercel.app/resources/logo.png" />
+    <!-- URL del proyecto -->
+    <meta property="og:url" content="https://mi-agenda-v01.vercel.app" />
+    <!-- Tipo de contenido -->
+    <meta property="og:type" content="website" />
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="./resources/favicon.png">
+    <!-- Estilos CSS -->
+    <link rel="stylesheet" href="styles.css?v251103-1750" />
+</head>
+
+<body>
+    <h3 style="width: 320px;">REGISTRO ACADÉMICO</h3>
+    <section id="ucla">
+        <div>
+            <button id="ucla_btMaterias">Materias</button>
+            <button id="ucla_btEstudiantes">Estudiantes</button>
+            <button id="ucla_btReportes">Reportes</button>
+        </div>
+        <h4 style="margin-top: 10px;">Materias registradas: <span id="ucla_lblMaterias">0</span></h4>
+        <h4>Estudiantes registrados: <span id="ucla_lblEstudiantes">0</span></h4>
+    </section>
+    <section id="materias">
+        <h3>Materias</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 100px;">Código</th>
+                    <th style="width: 80px;">Materia</th>
+                    <th style="width: 100px;">Opciones</th>
+                </tr>
+            </thead>
+            <tbody id="materias_divMaterias"> </tbody>
+        </table>
+        <button id="materias_btAgregar">Agregar</button>
+        <button id="materias_btVolver">Volver</button>
+    </section>
+    <section id="materia">
+        <h3><span id="materia_lblOpcion">??</span> Materia</h3>
+        <div class="ficha">
+            <label>Código:
+                <input type="text" id="materia_inCodigo"></input>
+            </label>
+            <label>Nombre:
+                <input type="text" id="materia_inNombre"></input>
+            </label>
+        </div>
+        <div>
+            <button id="materia_btAceptar">Aceptar</button>
+            <button id="materia_btCancelar">Cancelar</button>
+        </div>
+    </section>
+    <section id="estudiantes" hidden>
+        <h3>Estudiantes</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 50px;">Cédula</th>
+                    <th style="width: 150px;">Nombre</th>
+                    <th style="width: 50px;">Materias</th>
+                    <th style="width: 50px;">Opciones</th>
+                </tr>
+            </thead>
+            <tbody id="estudiantes_divEstudiantes"> </tbody>
+        </table>
+        <button id="estudiantes_btAgregar">Agregar</button>
+        <button id="estudiantes_btVolver">Volver</button>
+    </section>
+    <section id="estudiante" hidden>
+        <h3>Estudiante</h3>
+        <div class="ficha">
+            <label>Cédula:
+                <input type="text" id="estudiante_inCodigo"></input>
+            </label>
+            <label>Nombre:
+                <input type="text" id="estudiante_inCodigo" style="width: 200px"></input>
+            </label>
+            <button id="estudiante_btAgregar">Grabar</button>
+        </div>
+        <table style="margin-top: 10px;">
+            <thead>
+                <tr>
+                    <th style="width: 50px;">Código</th>
+                    <th style="width: 150px;">Nombre</th>
+                    <th style="width: 150px;">Nota</th>
+                    <th style="width: 50px;">Opciones</th>
+                </tr>
+            </thead>
+            <tbody id="estudiante_divMaterias"> </tbody>
+        </table>
+        <button id="estudiante_btAgregar">Agregar</button>
+        <button id="estudiante_btVolver">Volver</button>
+    </section>
+    <script type="module">
+        import Cl_index from "./dist/Cl_index.js";
+        new Cl_index()
+    </script>
+</body>
+
+</html>
