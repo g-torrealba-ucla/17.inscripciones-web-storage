@@ -11,7 +11,15 @@ export default class Cl_mMateria extends Cl_mTablaWeb {
   private _codigo: string = "";
   private _nombre: string = "";
 
-  constructor({ id, creadoEl, alias, codigo, nombre }: iMateria) {
+  constructor(
+    { id, creadoEl, alias, codigo, nombre }: iMateria = {
+      id: null,
+      creadoEl: null,
+      alias: null,
+      codigo: "",
+      nombre: "",
+    }
+  ) {
     super({ id, creadoEl, alias });
     this.codigo = codigo;
     this.nombre = nombre;

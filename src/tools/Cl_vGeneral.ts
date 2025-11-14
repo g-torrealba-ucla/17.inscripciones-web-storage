@@ -42,7 +42,6 @@ export default class Cl_vGeneral {
   get controlador(): Cl_controlador | null {
     return this._controlador;
   }
-
   refresh() {
     this.objects.forEach((element) => element.refresh());
   }
@@ -209,6 +208,6 @@ export default class Cl_vGeneral {
   }
 
   show({ ver = true }: { ver?: boolean } = { ver: true }): void {
-    if (this.vista) this.vista.style.display = ver ? "flex" : "none";
+    if (this.vista) this.vista.style.display = ver ? "" : "none";
   }
 }

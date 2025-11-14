@@ -1,6 +1,12 @@
 import Cl_mTablaWeb from "./tools/Cl_mTablaWeb.js";
 export default class Cl_mMateria extends Cl_mTablaWeb {
-    constructor({ id, creadoEl, alias, codigo, nombre }) {
+    constructor({ id, creadoEl, alias, codigo, nombre } = {
+        id: null,
+        creadoEl: null,
+        alias: null,
+        codigo: "",
+        nombre: "",
+    }) {
         super({ id, creadoEl, alias });
         this._codigo = "";
         this._nombre = "";

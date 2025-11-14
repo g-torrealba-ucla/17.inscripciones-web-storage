@@ -62,10 +62,6 @@ td {
 .colNumber {
   column-width: 50px;
 }
-.divSalida {
-  display: flex;
-  flex-direction: column;
-}
 .spanInfo {
   font-size: 10px;
   font-style: italic;

@@ -10,22 +10,22 @@ export default class Cl_mUcla {
         this.estudiantes = [];
     }
     addMateria({ dtMateria, callback, }) {
-        let encontrada = this.materias.find((m) => m.codigo === dtMateria.codigo);
-        if (encontrada)
-            callback(`La materia con código ${dtMateria.codigo} ya existe.`);
         let materia = new Cl_mMateria(dtMateria);
-        if (!materia.materiaOk)
+        if (this.materias.find((m) => m.codigo === dtMateria.codigo))
+            callback(`La materia con código ${dtMateria.codigo} ya existe.`);
+        else if (!materia.materiaOk)
             callback(materia.materiaOk);
-        this.db.addRecord({
-            tabla: this.tbMateria,
-            registroAlias: dtMateria.codigo,
-            object: materia.toJSON(),
-            callback: ({ id, objects: materias, error }) => {
-                if (!error)
-                    this.llenarMaterias(materias);
-                callback === null || callback === void 0 ? void 0 : callback(error);
-            },
-        });
+        else
+            this.db.addRecord({
+                tabla: this.tbMateria,
+                registroAlias: dtMateria.codigo,
+                object: materia.toJSON(),
+                callback: ({ id, objects: materias, error }) => {
+                    if (!error)
+                        this.llenarMaterias(materias);
+                    callback === null || callback === void 0 ? void 0 : callback(error);
+                },
+            });
     }
     deleteMateria({ codigo, callback, }) {
         let indice = this.materias.findIndex((m) => m.codigo === codigo);
@@ -66,7 +66,7 @@ export default class Cl_mUcla {
         // Obtener la información desde la Web Storage
         this.db.listRecords({
             tabla: this.tbMateria,
-            callback: ({ materias, error }) => {
+            callback: ({ objects, error }) => {
                 if (error)
                     callback(`Error cargando materias: ${error}`);
                 else
@@ -76,7 +76,7 @@ export default class Cl_mUcla {
                             if (error)
                                 callback(`Error cargando estudiantes: ${error}`);
                             else {
-                                this.llenarMaterias(materias !== null && materias !== void 0 ? materias : []);
+                                this.llenarMaterias(objects !== null && objects !== void 0 ? objects : []);
                                 this.llenarEstudiantes(estudiantes !== null && estudiantes !== void 0 ? estudiantes : []);
                                 callback(false);
                             }

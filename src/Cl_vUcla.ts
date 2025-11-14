@@ -39,6 +39,9 @@ export default class Cl_vUcla extends Cl_vGeneral {
     this.vMaterias.controlador = controlador;
     this.vMateria.controlador = controlador;
   }
+  get controlador(): Cl_controlador | null {
+    return super.controlador;
+  }
   activarVista({
     vista,
     opcion,

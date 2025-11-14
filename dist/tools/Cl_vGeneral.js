@@ -135,6 +135,6 @@ export default class Cl_vGeneral {
     }
     show({ ver = true } = { ver: true }) {
         if (this.vista)
-            this.vista.style.display = ver ? "flex" : "none";
+            this.vista.style.display = ver ? "" : "none";
     }
 }

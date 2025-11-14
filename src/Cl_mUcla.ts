@@ -2,7 +2,7 @@ import Cl_dcytDb from "https://gtplus.net/forms2/dcytDb/api/Cl_dcytDb.php?v25111
 import Cl_mEstudiante, { iEstudiante } from "./Cl_mEstudiante.js";
 import Cl_mMateria, { iMateria } from "./Cl_mMateria.js";
 interface iResultMaterias {
-  materias: [iMateria] | null;
+  objects: [iMateria] | null;
   error: string | false;
 }
 interface iResultEstudiantes {
@@ -29,20 +29,20 @@ export default class Cl_mUcla {
     dtMateria: iMateria;
     callback: (error: string | false) => void;
   }): void {
-    let encontrada = this.materias.find((m) => m.codigo === dtMateria.codigo);
-    if (encontrada)
-      callback(`La materia con código ${dtMateria.codigo} ya existe.`);
     let materia = new Cl_mMateria(dtMateria);
-    if (!materia.materiaOk) callback(materia.materiaOk);
-    this.db.addRecord({
-      tabla: this.tbMateria,
-      registroAlias: dtMateria.codigo,
-      object: materia.toJSON(),
-      callback: ({ id, objects: materias, error }) => {
-        if (!error) this.llenarMaterias(materias);
-        callback?.(error);
-      },
-    });
+    if (this.materias.find((m) => m.codigo === dtMateria.codigo))
+      callback(`La materia con código ${dtMateria.codigo} ya existe.`);
+    else if (!materia.materiaOk) callback(materia.materiaOk);
+    else
+      this.db.addRecord({
+        tabla: this.tbMateria,
+        registroAlias: dtMateria.codigo,
+        object: materia.toJSON(),
+        callback: ({ id, objects: materias, error }) => {
+          if (!error) this.llenarMaterias(materias);
+          callback?.(error);
+        },
+      });
   }
   deleteMateria({
     codigo,
@@ -101,7 +101,7 @@ export default class Cl_mUcla {
     // Obtener la información desde la Web Storage
     this.db.listRecords({
       tabla: this.tbMateria,
-      callback: ({ materias, error }: iResultMaterias) => {
+      callback: ({ objects, error }: iResultMaterias) => {
         if (error) callback(`Error cargando materias: ${error}`);
         else
           this.db.listRecords({
@@ -109,7 +109,7 @@ export default class Cl_mUcla {
             callback: ({ estudiantes, error }: iResultEstudiantes) => {
               if (error) callback(`Error cargando estudiantes: ${error}`);
               else {
-                this.llenarMaterias(materias ?? []);
+                this.llenarMaterias(objects ?? []);
                 this.llenarEstudiantes(estudiantes ?? []);
                 callback(false);
               }

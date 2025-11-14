@@ -32,10 +32,10 @@ export default class Cl_vMaterias extends Cl_vGeneral {
                 <button id="materias_btEliminar_${materia.codigo}">X</button>
             </td>
         </tr>`;
-      this.crearHTMLButtonElement(`materias_btEditar_${materia.codigo}`, {
+      this.crearHTMLButtonElement(`btEditar_${materia.codigo}`, {
         onclick: () => this.editarMateria(materia.codigo),
       });
-      this.crearHTMLButtonElement(`materias_btEliminar_${materia.codigo}`, {
+      this.crearHTMLButtonElement(`btEliminar_${materia.codigo}`, {
         onclick: () => this.eliminarMateria(materia.codigo),
       });
     });
