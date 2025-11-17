@@ -37,8 +37,27 @@ export default class Cl_mUcla {
       this.db.addRecord({
         tabla: this.tbMateria,
         registroAlias: dtMateria.codigo,
-        object: materia.toJSON(),
+        object: materia,
         callback: ({ id, objects: materias, error }) => {
+          if (!error) this.llenarMaterias(materias);
+          callback?.(error);
+        },
+      });
+  }
+  editMateria({
+    dtMateria,
+    callback,
+  }: {
+    dtMateria: iMateria;
+    callback: (error: string | boolean) => void;
+  }): void {
+    let materia = new Cl_mMateria(dtMateria);
+    if (!materia.materiaOk) callback(materia.materiaOk);
+    else
+      this.db.editRecord({
+        tabla: this.tbMateria,
+        object: materia,
+        callback: ({ objects: materias, error }) => {
           if (!error) this.llenarMaterias(materias);
           callback?.(error);
         },
@@ -53,13 +72,29 @@ export default class Cl_mUcla {
   }): void {
     let indice = this.materias.findIndex((m) => m.codigo === codigo);
     if (indice === -1) callback(`La materia con código ${codigo} no existe.`);
-    for (let estudiante of this.estudiantes)
-      if (estudiante.inscritoEn(codigo))
+    else {
+      // Verificar si están inscritos estudiantes en la materia
+      let algunInscrito = false;
+      for (let estudiante of this.estudiantes)
+        if (estudiante.inscritoEn(codigo)) {
+          algunInscrito = true;
+          break;
+        }
+      if (algunInscrito)
         callback(
-          `No se puede eliminar "${codigo}" (inscrita por "${estudiante.cedula}")`
+          `No se puede eliminar "${codigo}" (inscrita por un estudiante)`
         );
-    this.materias.splice(indice, 1);
-    callback(false);
+      else {
+        this.db.deleteRecord({
+          tabla: this.tbMateria,
+          object: this.materias[indice],
+          callback: ({ objects: materias, error }) => {
+            if (!error) this.llenarMaterias(materias);
+            callback?.(error);
+          },
+        });
+      }
+    }
   }
   addEstudiante({
     dtEstudiante,
@@ -96,6 +131,10 @@ export default class Cl_mUcla {
   }
   dtEstudiantes(): iEstudiante[] {
     return this.estudiantes.map((e) => e.toJSON());
+  }
+  materia(codigo: string): Cl_mMateria | null {
+    let materia = this.materias.find((m) => m.codigo === codigo);
+    return materia ? materia : null;
   }
   cargar(callback: (error: string | false) => void): void {
     // Obtener la información desde la Web Storage

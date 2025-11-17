@@ -32,9 +32,9 @@ export default class Cl_vUcla extends Cl_vGeneral {
     get controlador() {
         return super.controlador;
     }
-    activarVista({ vista, opcion, }) {
+    activarVista({ vista, opcion, objeto, }) {
         this.show({ ver: vista === "ucla" });
         this.vMaterias.show({ ver: vista === "materias" });
-        this.vMateria.show({ ver: vista === "materia", opcion });
+        this.vMateria.show({ ver: vista === "materia", materia: objeto, opcion });
     }
 }

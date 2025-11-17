@@ -19,8 +19,23 @@ export default class Cl_mUcla {
             this.db.addRecord({
                 tabla: this.tbMateria,
                 registroAlias: dtMateria.codigo,
-                object: materia.toJSON(),
+                object: materia,
                 callback: ({ id, objects: materias, error }) => {
+                    if (!error)
+                        this.llenarMaterias(materias);
+                    callback === null || callback === void 0 ? void 0 : callback(error);
+                },
+            });
+    }
+    editMateria({ dtMateria, callback, }) {
+        let materia = new Cl_mMateria(dtMateria);
+        if (!materia.materiaOk)
+            callback(materia.materiaOk);
+        else
+            this.db.editRecord({
+                tabla: this.tbMateria,
+                object: materia,
+                callback: ({ objects: materias, error }) => {
                     if (!error)
                         this.llenarMaterias(materias);
                     callback === null || callback === void 0 ? void 0 : callback(error);
@@ -31,11 +46,28 @@ export default class Cl_mUcla {
         let indice = this.materias.findIndex((m) => m.codigo === codigo);
         if (indice === -1)
             callback(`La materia con código ${codigo} no existe.`);
-        for (let estudiante of this.estudiantes)
-            if (estudiante.inscritoEn(codigo))
-                callback(`No se puede eliminar "${codigo}" (inscrita por "${estudiante.cedula}")`);
-        this.materias.splice(indice, 1);
-        callback(false);
+        else {
+            // Verificar si están inscritos estudiantes en la materia
+            let algunInscrito = false;
+            for (let estudiante of this.estudiantes)
+                if (estudiante.inscritoEn(codigo)) {
+                    algunInscrito = true;
+                    break;
+                }
+            if (algunInscrito)
+                callback(`No se puede eliminar "${codigo}" (inscrita por un estudiante)`);
+            else {
+                this.db.deleteRecord({
+                    tabla: this.tbMateria,
+                    object: this.materias[indice],
+                    callback: ({ objects: materias, error }) => {
+                        if (!error)
+                            this.llenarMaterias(materias);
+                        callback === null || callback === void 0 ? void 0 : callback(error);
+                    },
+                });
+            }
+        }
     }
     addEstudiante({ dtEstudiante, callback, }) {
         let existe = this.estudiantes.find((e) => e.cedula === dtEstudiante.cedula);
@@ -61,6 +93,10 @@ export default class Cl_mUcla {
     }
     dtEstudiantes() {
         return this.estudiantes.map((e) => e.toJSON());
+    }
+    materia(codigo) {
+        let materia = this.materias.find((m) => m.codigo === codigo);
+        return materia ? materia : null;
     }
     cargar(callback) {
         // Obtener la información desde la Web Storage

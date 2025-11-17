@@ -1,4 +1,5 @@
 import Cl_controlador from "./Cl_controlador.js";
+import Cl_mMateria from "./Cl_mMateria.js";
 import Cl_vMateria from "./Cl_vMateria.js";
 import Cl_vMaterias from "./Cl_vMaterias.js";
 import Cl_vGeneral from "./tools/Cl_vGeneral.js";
@@ -45,12 +46,14 @@ export default class Cl_vUcla extends Cl_vGeneral {
   activarVista({
     vista,
     opcion,
+    objeto,
   }: {
     vista: string;
     opcion?: opcionFicha;
+    objeto?: Cl_mMateria;
   }): void {
     this.show({ ver: vista === "ucla" });
     this.vMaterias.show({ ver: vista === "materias" });
-    this.vMateria.show({ ver: vista === "materia", opcion });
+    this.vMateria.show({ ver: vista === "materia", materia: objeto, opcion });
   }
 }

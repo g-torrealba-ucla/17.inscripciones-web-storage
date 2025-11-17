@@ -4,6 +4,8 @@ import { opcionFicha } from "./tools/core.tools.js";
 export default class Cl_vMateria extends Cl_vGeneral {
     constructor() {
         super({ formName: "materia" });
+        this.opcion = null;
+        this.materia = new Cl_mMateria();
         this.lblOpcion = this.crearHTMLLabelElement("lblOpcion", {
             refresh: () => (this.lblOpcion.innerHTML =
                 this.opcion === opcionFicha.add ? "Agregar " : "Editar "),
@@ -17,6 +19,7 @@ export default class Cl_vMateria extends Cl_vGeneral {
             },
             refresh: () => (this.inCodigo.style.borderColor = this.materia.codigoOk ? "" : "red"),
         });
+        this.inCodigo.disabled = this.opcion === opcionFicha.edit;
         this.inNombre = this.crearHTMLInputElement("inNombre", {
             oninput: () => {
                 this.inNombre.value = this.materia.nombre = this.inNombre.value
@@ -35,8 +38,6 @@ export default class Cl_vMateria extends Cl_vGeneral {
         this.btCancelar = this.crearHTMLButtonElement("btCancelar", {
             onclick: () => this.controlador.activarVista({ vista: "materias" }),
         });
-        this.opcion = null;
-        this.materia = new Cl_mMateria();
     }
     aceptar() {
         if (this.opcion === opcionFicha.add)
@@ -49,13 +50,27 @@ export default class Cl_vMateria extends Cl_vGeneral {
                         alert(`Error: ${error}`);
                 },
             });
+        else {
+            this.controlador.editMateria({
+                dtMateria: this.materia.toJSON(),
+                callback: (error) => {
+                    if (!error)
+                        this.controlador.activarVista({ vista: "materias" });
+                    else
+                        alert(`Error: ${error}`);
+                },
+            });
+        }
     }
-    show({ ver, opcion }) {
+    show({ ver, materia: materia, opcion, } = {
+        ver: false,
+        materia: new Cl_mMateria(),
+    }) {
         super.show({ ver });
         if (opcion) {
-            this.inCodigo.value = "";
-            this.inNombre.value = "";
             this.opcion = opcion;
+            this.materia.codigo = this.inCodigo.value = materia.codigo;
+            this.materia.nombre = this.inNombre.value = materia.nombre;
             this.refresh();
         }
     }
