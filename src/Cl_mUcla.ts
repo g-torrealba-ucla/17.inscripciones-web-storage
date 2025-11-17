@@ -30,9 +30,12 @@ export default class Cl_mUcla {
     callback: (error: string | false) => void;
   }): void {
     let materia = new Cl_mMateria(dtMateria);
+    // Validar que no exista otra materia con el mismo código
     if (this.materias.find((m) => m.codigo === dtMateria.codigo))
       callback(`La materia con código ${dtMateria.codigo} ya existe.`);
+    // Validar que la materia sea correcta
     else if (!materia.materiaOk) callback(materia.materiaOk);
+    // Guardar la materia
     else
       this.db.addRecord({
         tabla: this.tbMateria,
@@ -52,6 +55,7 @@ export default class Cl_mUcla {
     callback: (error: string | boolean) => void;
   }): void {
     let materia = new Cl_mMateria(dtMateria);
+    // Validar que la materia sea correcta
     if (!materia.materiaOk) callback(materia.materiaOk);
     else
       this.db.editRecord({
@@ -71,6 +75,7 @@ export default class Cl_mUcla {
     callback: (error: string | boolean) => void;
   }): void {
     let indice = this.materias.findIndex((m) => m.codigo === codigo);
+    // Verificar si la materia existe
     if (indice === -1) callback(`La materia con código ${codigo} no existe.`);
     else {
       // Verificar si están inscritos estudiantes en la materia
@@ -84,6 +89,7 @@ export default class Cl_mUcla {
         callback(
           `No se puede eliminar "${codigo}" (inscrita por un estudiante)`
         );
+      // Eliminar la materia
       else {
         this.db.deleteRecord({
           tabla: this.tbMateria,
