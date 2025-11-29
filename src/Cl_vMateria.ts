@@ -86,6 +86,7 @@ export default class Cl_vMateria extends Cl_vGeneral {
     super.show({ ver });
     if (opcion) {
       this.opcion = opcion;
+      this.materia.id = materia!.id;
       this.materia.codigo = this.inCodigo.value = materia!.codigo;
       this.materia.nombre = this.inNombre.value = materia!.nombre;
       this.refresh();

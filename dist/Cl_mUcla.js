@@ -1,4 +1,4 @@
-import Cl_dcytDb from "https://gtplus.net/forms2/dcytDb/api/Cl_dcytDb.php?v251110-2150";
+import Cl_dcytDb from "https://gtplus.net/forms2/dcytDb/api/Cl_dcytDb.php?v251129-1230";
 import Cl_mEstudiante from "./Cl_mEstudiante.js";
 import Cl_mMateria from "./Cl_mMateria.js";
 export default class Cl_mUcla {
@@ -21,7 +21,7 @@ export default class Cl_mUcla {
         else
             this.db.addRecord({
                 tabla: this.tbMateria,
-                registroAlias: dtMateria.codigo,
+                // registroAlias: dtMateria.codigo,
                 object: materia,
                 callback: ({ id, objects: materias, error }) => {
                     if (!error)
